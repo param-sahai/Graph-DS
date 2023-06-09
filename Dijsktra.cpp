@@ -22,3 +22,5 @@
         return distance;
         
     }
+
+// T.C. = E log V
