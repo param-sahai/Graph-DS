@@ -1,27 +1,43 @@
 class Solution {
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        queue<pair<string, int>>q;
-        q.push({beginWord, 1});
+        int wordLadderLength(string startWord, string targetWord, vector<string>& wordList) {
+        // Code here
         unordered_set<string>st(wordList.begin(), wordList.end());
-        st.erase(beginWord);
+        queue<pair<string, int>>q;
+        //initial searching of elements
+        for(int i=0;i<startWord.size();i++){
+            char c = startWord[i];
+            for(char ch='a'; ch<='z';ch++){
+                startWord[i]=ch;
+                if(st.find(startWord)!=st.end()){
+                    q.push({startWord, 1});
+                    st.erase(startWord);
+                }
+            }
+            startWord[i] = c;
+        }
+            
+        // N X (WordSize X 26) x logN -- unordered Set complexity
         while(!q.empty()){
             string word = q.front().first;
-            int step = q.front().second;
+            int count = q.front().second;
+            if(word==targetWord)
+                return count+1;
             q.pop();
-            if(word == endWord) return step;
             for(int i=0;i<word.size();i++){
-                char original = word[i];
-                for(char ch = 'a';ch<='z';ch++){
-                    word[i] = ch;
-                    if(st.find(word)!=st.end()){ //if word has been found in the set
+                char c = word[i];
+                for(char ch='a'; ch<='z';ch++){
+                    word[i]=ch;
+                    if(st.find(word)!=st.end()){
+                        q.push({word, count+1});
                         st.erase(word);
-                        q.push({word, step+1});
                     }
                 }
-                word[i] = original;
+                word[i] = c;
             }
         }
         return 0;
+        
     }
+
 };
